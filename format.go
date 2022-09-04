@@ -51,8 +51,7 @@ func formatTabs() string {
 		}
 		out.WriteString(t)
 		if windows[i].Active {
-			normal := os.Getenv("FONT")
-			out.WriteString(fmt.Sprintf("%%{T%s}", normal))
+			out.WriteString("%{T-}")
 		}
 		out.WriteRune(' ')
 		if i < len(tabs)-1 {
