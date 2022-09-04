@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/very-amused/polybar-bspwm-tabs/bspc"
@@ -24,9 +25,9 @@ func formatTabs() string {
 
 	tabs := make([]string, len(windows)) // Inner tab cell content
 	for i, w := range windows {
-		tabs[i] = w.ClassName
-		if indicators[w.ClassName] != nil {
-			ind := indicators[w.ClassName]
+		tabs[i] = w.InstanceName
+		if indicators[w.InstanceName] != nil {
+			ind := indicators[w.InstanceName]
 			tabs[i] += fmt.Sprintf(" (%d)", ind.value)
 
 			// If the previous tab was not known to be part of a set at the time, add its indicator
@@ -34,25 +35,29 @@ func formatTabs() string {
 				tabs[ind.initialTab] += " (0)"
 			}
 		} else {
-			indicators[w.ClassName] = &tabIndex{
+			indicators[w.InstanceName] = &tabIndex{
 				initialTab: i}
 		}
-		indicators[w.ClassName].value++
+		indicators[w.InstanceName].value++
 	}
 
 	var out strings.Builder
-	const border = '\u2571'
-	out.WriteRune(border) // Left border
+	const border = 0x2f
 	for i, t := range tabs {
+		out.WriteRune(' ')
 		if windows[i].Active {
-			// Reverse fg/bg colors
-			out.WriteString("%{R}")
+			bold := os.Getenv("BOLD_FONT")
+			out.WriteString(fmt.Sprintf("%%{T%s}", bold))
 		}
-		out.WriteString(" " + t + " ")
+		out.WriteString(t)
 		if windows[i].Active {
-			out.WriteString("%{R}")
+			normal := os.Getenv("FONT")
+			out.WriteString(fmt.Sprintf("%%{T%s}", normal))
 		}
-		out.WriteRune(border)
+		out.WriteRune(' ')
+		if i < len(tabs)-1 {
+			out.WriteRune(border)
+		}
 	}
 	return out.String()
 }
