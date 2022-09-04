@@ -15,7 +15,7 @@ type tabIndex struct {
 func formatTabs() string {
 	windows := bspc.QueryWindows()
 	// If there are no monocle windows open, clear the module output
-	if windows == nil || len(windows) == 0 {
+	if windows == nil || len(windows) < 2 {
 		return ""
 	}
 
@@ -41,7 +41,8 @@ func formatTabs() string {
 	}
 
 	var out strings.Builder
-	out.WriteString("|") // Left border
+	const border = '\u2571'
+	out.WriteRune(border) // Left border
 	for i, t := range tabs {
 		if windows[i].Active {
 			// Reverse fg/bg colors
@@ -49,9 +50,9 @@ func formatTabs() string {
 		}
 		out.WriteString(" " + t + " ")
 		if windows[i].Active {
-			out.WriteString("%{R-}")
+			out.WriteString("%{R}")
 		}
-		out.WriteString("|")
+		out.WriteRune(border)
 	}
 	return out.String()
 }
