@@ -5,6 +5,5 @@ import (
 )
 
 func main() {
-	// Subscribe to bspc events
-	bspc.Subscribe()
+	bspc.QueryTabs()
 }
