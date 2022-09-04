@@ -1,9 +1,14 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/very-amused/polybar-bspwm-tabs/bspc"
 )
 
 func main() {
-	bspc.QueryTabs()
+	windows := bspc.QueryWindows()
+	m, _ := json.MarshalIndent(windows, "", "  ")
+	fmt.Println(string(m))
 }
