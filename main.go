@@ -7,6 +7,9 @@ import (
 )
 
 func main() {
-	windows := bspc.QueryWindows()
-	fmt.Println(FormatTabs(windows))
+	fmt.Println(formatTabs())
+	update := bspc.Subscribe()
+	for <-update {
+		fmt.Println(formatTabs())
+	}
 }

@@ -12,7 +12,8 @@ type tabIndex struct {
 	initialTab int // Index of the tab that resulted in the index being created, used to add a (0) indicator to tabs when they're found to be part of a set
 }
 
-func FormatTabs(windows []bspc.Window) string {
+func formatTabs() string {
+	windows := bspc.QueryWindows()
 	// If there are no monocle windows open, clear the module output
 	if windows == nil || len(windows) == 0 {
 		return ""
