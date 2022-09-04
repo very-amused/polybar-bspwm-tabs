@@ -36,7 +36,6 @@ func QueryWindows() (windows []Window) {
 	for i, w := range windows {
 		if w.nodeID == tree.FocusedNodeID {
 			windows[i].Active = true
-			break // There can only be 1 active window
 		}
 	}
 	return windows
